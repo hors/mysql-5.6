@@ -1,4 +1,9 @@
 #!/bin/bash
+
+set -o errexit
+set -o xtrace
+
+
 MKFILE=`mktemp`
 # create and run a simple makefile
 # include rocksdb make file relative to the path of this script
@@ -13,7 +18,13 @@ rm $MKFILE
 
 # create build_version.cc file. Only create one if it doesn't exists or if it is different
 # this is so that we don't rebuild mysqld every time
-bv=rocksdb/util/build_version.cc
+pwd 
+ls -al
+sleep 10
+find / -name 'build_version.cc'
+find / -name 'util'
+ls -al ../../rocksdb/
+bv=../../rocksdb/util/build_version.cc
 date=$(date +%F)
 git_sha=$(pushd rocksdb >/dev/null && git rev-parse  HEAD 2>/dev/null && popd >/dev/null)
 if [ ! -f $bv ] || [ -z $git_sha ] || [ ! `grep $git_sha $bv` ]
